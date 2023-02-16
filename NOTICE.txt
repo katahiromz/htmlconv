@@ -1,0 +1,2 @@
+文字コードの変換処理の一部に
+Network Kanji Filter (NKF) 2.1.1.0を使用しています。

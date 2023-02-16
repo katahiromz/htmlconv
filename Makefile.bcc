@@ -1,0 +1,43 @@
+# Makefile for Borland C++
+
+DEFS = 
+CXXFLAGS = $(DEFS) -O2 -DNDEBUG -WM
+#CXXFLAGS = $(DEFS) -v -y -DDEBUG -D_DEBUG -WM
+A_CXXFLAGS = $(CXXFLAGS) -DMBCS -D_MBCS
+W_CXXFLAGS = $(CXXFLAGS) -WU -DUNICODE -D_UNICODE
+
+OBJS = html.obj filea.obj filew.obj utf8.obj uia.obj uiw.obj htmlconv.obj
+
+all: htmlconv.exe
+
+htmlconv.exe: $(OBJS) htmlconv.rc
+	bcc32 -W $(CXXFLAGS) -ehtmlconv.exe $(OBJS) nkf32.lib
+	brc32 htmlconv
+
+html.obj: htmlconv.h resource.h html.cpp
+	bcc32 -c $(A_CXXFLAGS) html.cpp
+
+filea.obj: htmlconv.h resource.h file.cpp
+	bcc32 -c -ofilea.obj $(A_CXXFLAGS) file.cpp
+
+filew.obj: htmlconv.h resource.h file.cpp
+	bcc32 -c -ofilew.obj $(W_CXXFLAGS) file.cpp
+
+utf8.obj: utf8.cpp
+	bcc32 -c $(A_CXXFLAGS) utf8.cpp
+
+uia.obj: htmlconv.h resource.h ui.cpp
+	bcc32 -c -ouia.obj $(A_CXXFLAGS) ui.cpp
+
+uiw.obj: htmlconv.h resource.h ui.cpp
+	bcc32 -c -ouiw.obj $(W_CXXFLAGS) ui.cpp
+
+htmlconv.obj: htmlconv.h resource.h htmlconv.cpp
+	bcc32 -c $(A_CXXFLAGS) htmlconv.cpp
+
+clean: 
+	if exist *.obj del *.obj
+	if exist *.res del *.res
+	if exist *.tds del *.tds
+	if exist *.td2 del *.td2
+	if exist *.tr2 del *.tr2
